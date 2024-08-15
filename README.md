@@ -5,6 +5,7 @@ First, make sure you have the required libraries installed. You can install them
 
 pip install requests beautifulsoup4
 
+You can change the website you want.
 
 You can change the browser_choice variable to the browser you want to use, such as 'firefox', 'chrome', or 'safari'. Make sure the browser is installed and recognized by the webbrowser module.
 
