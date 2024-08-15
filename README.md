@@ -1,6 +1,13 @@
 <a name="readme-top"></a>
 
 # 
+First, make sure you have the required libraries installed. You can install them using pip:
+
+pip install requests beautifulsoup4
+
+![p]()
+
+You can change the browser_choice variable to the browser you want to use, such as 'firefox', 'chrome', or 'safari'. Make sure the browser is installed and recognized by the webbrowser module.
 
 --------------------------------------------------------------------------------------------------------------------------
 == We're Using GitHub Under Protest ==
