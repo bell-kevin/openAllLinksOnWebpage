@@ -1,7 +1,7 @@
 <a name="readme-top"></a>
 
 # 
-First, make sure you have the required libraries installed. You can install them using pip by opening command prompt:
+First, make sure you have the required libraries installed. You can install them using pip by opening command prompt and typing:
 
 pip install requests beautifulsoup4
 
