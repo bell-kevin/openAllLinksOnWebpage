@@ -7,6 +7,10 @@ pip install requests beautifulsoup4
 
 ![p](https://github.com/bell-kevin/openAllLinksOnWebpage/blob/main/Screenshot%202024-08-16%20082211.png)
 
+Or open Terminal and type:
+
+sudo apt install python3-requests python3-bs4
+
 You can change the website you want.
 
 --------------------------------------------------------------------------------------------------------------------------
