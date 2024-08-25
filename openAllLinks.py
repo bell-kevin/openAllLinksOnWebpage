@@ -7,7 +7,7 @@ def open_all_links(url, browser_name):
     start_time = time.time()
     
     print(f"Sending GET request to {url}")
-    response = requests.get(url, timeout=10)
+    response = requests.get(url, timeout=1)
    
     if response.status_code != 200:
         print(f"Failed to retrieve the website. Status code: {response.status_code}")
@@ -30,11 +30,8 @@ def open_all_links(url, browser_name):
                     final_url = get_final_url(href)
                     if final_url != href:
                         print(f"Redirected from {href} to {final_url}")
-                    if "piped" in final_url:
-                        print(f"Opening absolute link: {final_url}")
-                        webbrowser.get(browser_name).open(final_url)
-                    else:
-                        print(f"Skipping link without 'piped': {final_url}")
+                    print(f"Opening absolute link: {final_url}")
+                    webbrowser.get(browser_name).open(final_url)
                 else:
                     print(f"Skipping unreachable link: {href}")
             else:
@@ -46,11 +43,8 @@ def open_all_links(url, browser_name):
                     final_url = get_final_url(absolute_url)
                     if final_url != absolute_url:
                         print(f"Redirected from {absolute_url} to {final_url}")
-                    if "piped" in final_url:
-                        print(f"Opening relative link: {final_url}")
-                        webbrowser.get(browser_name).open(final_url)
-                    else:
-                        print(f"Skipping link without 'piped': {final_url}")
+                    print(f"Opening relative link: {final_url}")
+                    webbrowser.get(browser_name).open(final_url)
                 else:
                     print(f"Skipping unreachable link: {absolute_url}")
             else:
