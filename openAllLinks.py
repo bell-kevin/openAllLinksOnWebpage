@@ -99,5 +99,5 @@ def count_links(url):
 
 # Example usage
 website_url = 'https://github.com/TeamPiped/Piped/wiki/Instances'
-browser_name = input("Which browser would you like to open all the links in? (Option: firefox or chromium) ")
+browser_name = input("Which browser would you like to use? (Option: firefox or chromium) ")
 links = open_all_links(website_url, browser_name)
