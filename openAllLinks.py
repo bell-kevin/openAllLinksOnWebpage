@@ -7,11 +7,11 @@ def open_all_links(url, browser_name):
     start_time = time.time()
     
     print(f"Sending GET request to {url}")
-    response = requests.get(url, timeout=1)
+    response = requests.get(url, timeout=10)
    
     if response.status_code != 200:
         print(f"Failed to retrieve the website. Status code: {response.status_code}")
-        return
+        return []
     print("Request successful")
    
     soup = BeautifulSoup(response.content, 'html.parser')
@@ -30,8 +30,12 @@ def open_all_links(url, browser_name):
                     final_url = get_final_url(href)
                     if final_url != href:
                         print(f"Redirected from {href} to {final_url}")
-                    print(f"Opening absolute link: {final_url}")
-                    webbrowser.get(browser_name).open(final_url)
+                    num_links = count_links(final_url)
+                    if num_links == 0 and "piped" in final_url:
+                        print(f"Opening absolute link: {final_url}")
+                        webbrowser.get(browser_name).open(final_url)
+                    else:
+                        print(f"Skipping link with {num_links} links or without 'piped': {final_url}")
                 else:
                     print(f"Skipping unreachable link: {href}")
             else:
@@ -43,8 +47,12 @@ def open_all_links(url, browser_name):
                     final_url = get_final_url(absolute_url)
                     if final_url != absolute_url:
                         print(f"Redirected from {absolute_url} to {final_url}")
-                    print(f"Opening relative link: {final_url}")
-                    webbrowser.get(browser_name).open(final_url)
+                    num_links = count_links(final_url)
+                    if num_links == 0 and "piped" in final_url:
+                        print(f"Opening relative link: {final_url}")
+                        webbrowser.get(browser_name).open(final_url)
+                    else:
+                        print(f"Skipping link with {num_links} links or without 'piped': {final_url}")
                 else:
                     print(f"Skipping unreachable link: {absolute_url}")
             else:
@@ -53,7 +61,9 @@ def open_all_links(url, browser_name):
     end_time = time.time()
     elapsed_time = end_time - start_time
     minutes, seconds = divmod(elapsed_time, 60)
-    print(f"Total time taken: {int(minutes)} minutes and {int(seconds)} seconds")
+    print(f"Total run time: {int(minutes)} minutes and {int(seconds)} seconds")
+    
+    return links
 
 def is_unreachable(url):
     try:
@@ -75,7 +85,19 @@ def get_final_url(url):
     except requests.RequestException:
         return url
 
+def count_links(url):
+    try:
+        response = requests.get(url, timeout=10)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            links = soup.find_all('a', href=True)
+            return len(links)
+        else:
+            return 0
+    except requests.RequestException:
+        return 0
+
 # Example usage
 website_url = 'https://github.com/TeamPiped/Piped/wiki/Instances'
-browser_name = input("Which browser would you like to open all the links in? (Option: firefox) ")
-open_all_links(website_url, browser_name)
+browser_name = input("Which browser would you like to open all the links in? (Option: firefox or chromium) ")
+links = open_all_links(website_url, browser_name)
