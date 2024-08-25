@@ -31,6 +31,7 @@ def open_all_links(url, browser_name):
                     if final_url != href:
                         print(f"Redirected from {href} to {final_url}")
                     num_links = count_links(final_url)
+                    print(f"Number of links on {final_url}: {num_links}")
                     if num_links == 0 and "piped" in final_url:
                         print(f"Opening absolute link: {final_url}")
                         webbrowser.get(browser_name).open(final_url)
@@ -48,6 +49,7 @@ def open_all_links(url, browser_name):
                     if final_url != absolute_url:
                         print(f"Redirected from {absolute_url} to {final_url}")
                     num_links = count_links(final_url)
+                    print(f"Number of links on {final_url}: {num_links}")
                     if num_links == 0 and "piped" in final_url:
                         print(f"Opening relative link: {final_url}")
                         webbrowser.get(browser_name).open(final_url)
