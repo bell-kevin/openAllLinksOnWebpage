@@ -11,10 +11,6 @@ Or open Terminal and type:
 
 sudo apt install python3-requests python3-bs4
 
-and then type:
-
-sudo apt install python3-requests python3-bs4 python3-selenium python3-opencv python3-numpy
-
 You can change the website you want.
 
 --------------------------------------------------------------------------------------------------------------------------
