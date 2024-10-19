@@ -5,6 +5,7 @@ import time
 
 def open_all_links(url, browser_name):
     start_time = time.time()
+    tabs_opened = 0  # Counter for opened tabs
     
     print(f"Sending GET request to {url}")
     response = requests.get(url, timeout=10)
@@ -35,6 +36,7 @@ def open_all_links(url, browser_name):
                     if num_links == 0 and "piped" in final_url:
                         print(f"Opening absolute link: {final_url}")
                         webbrowser.get(browser_name).open(final_url)
+                        tabs_opened += 1  # Increment the counter
                     else:
                         print(f"Skipping link with {num_links} links or without 'piped': {final_url}")
                 else:
@@ -53,6 +55,7 @@ def open_all_links(url, browser_name):
                     if num_links == 0 and "piped" in final_url:
                         print(f"Opening relative link: {final_url}")
                         webbrowser.get(browser_name).open(final_url)
+                        tabs_opened += 1  # Increment the counter
                     else:
                         print(f"Skipping link with {num_links} links or without 'piped': {final_url}")
                 else:
@@ -64,6 +67,7 @@ def open_all_links(url, browser_name):
     elapsed_time = end_time - start_time
     minutes, seconds = divmod(elapsed_time, 60)
     print(f"Total run time: {int(minutes)} minutes and {int(seconds)} seconds")
+    print(f"Total tabs opened: {tabs_opened}")  # Print the total number of tabs opened
     
     return links
 
