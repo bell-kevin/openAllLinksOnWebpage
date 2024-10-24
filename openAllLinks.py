@@ -2,27 +2,29 @@ import requests
 from bs4 import BeautifulSoup
 import webbrowser
 import time
+import os
+import platform
 
 def open_all_links(url, browser_name):
     start_time = time.time()
     tabs_opened = 0  # Counter for opened tabs
-    
+
     print(f"Sending GET request to {url}")
     response = requests.get(url, timeout=10)
-   
+
     if response.status_code != 200:
         print(f"Failed to retrieve the website. Status code: {response.status_code}")
         return []
     print("Request successful")
-   
+
     soup = BeautifulSoup(response.content, 'html.parser')
     print("Parsed HTML content")
-   
+
     links = soup.find_all('a', href=True)
     print(f"Found {len(links)} links:")
     for link in links:
         print(link['href'])
-   
+
     for link in links:
         href = link['href']
         if href.startswith('http'):
@@ -35,7 +37,7 @@ def open_all_links(url, browser_name):
                     print(f"Number of links on {final_url}: {num_links}")
                     if num_links == 0 and "piped" in final_url:
                         print(f"Opening absolute link: {final_url}")
-                        webbrowser.get(browser_name).open(final_url)
+                        open_in_browser(final_url, browser_name)
                         tabs_opened += 1  # Increment the counter
                     else:
                         print(f"Skipping link with {num_links} links or without 'piped': {final_url}")
@@ -54,7 +56,7 @@ def open_all_links(url, browser_name):
                     print(f"Number of links on {final_url}: {num_links}")
                     if num_links == 0 and "piped" in final_url:
                         print(f"Opening relative link: {final_url}")
-                        webbrowser.get(browser_name).open(final_url)
+                        open_in_browser(final_url, browser_name)
                         tabs_opened += 1  # Increment the counter
                     else:
                         print(f"Skipping link with {num_links} links or without 'piped': {final_url}")
@@ -68,7 +70,7 @@ def open_all_links(url, browser_name):
     minutes, seconds = divmod(elapsed_time, 60)
     print(f"Total run time: {int(minutes)} minutes and {int(seconds)} seconds")
     print(f"Total tabs opened: {tabs_opened}")  # Print the total number of tabs opened
-    
+
     return links
 
 def is_unreachable(url):
@@ -103,7 +105,32 @@ def count_links(url):
     except requests.RequestException:
         return 0
 
+def open_in_browser(url, browser_name):
+    # Detect the platform to choose the appropriate browser
+    system = platform.system()
+    
+    if system == 'Windows':
+        if browser_name == 'firefox':
+            firefox_path = r'C:\Program Files\Mozilla Firefox\firefox.exe'  # Update this path if Firefox is installed elsewhere
+            webbrowser.register('firefox', None, webbrowser.BackgroundBrowser(firefox_path))
+            webbrowser.get('firefox').open(url)
+        elif browser_name == 'chromium':
+            chromium_path = r'C:\Program Files\Google\Chrome\Application\chrome.exe'  # Adjust if Chromium is installed separately
+            webbrowser.register('chromium', None, webbrowser.BackgroundBrowser(chromium_path))
+            webbrowser.get('chromium').open(url)
+        else:
+            webbrowser.open(url)  # Opens with the default browser (usually Edge)
+    elif system == 'Linux':
+        if browser_name == 'firefox':
+            webbrowser.get('firefox').open(url)
+        elif browser_name == 'chromium':
+            webbrowser.get('chromium').open(url)
+        else:
+            webbrowser.open(url)
+    else:
+        webbrowser.open(url)
+
 # Example usage
 website_url = 'https://github.com/TeamPiped/Piped/wiki/Instances'
-browser_name = input("Which browser would you like to use? (Option: firefox or chromium) ")
+browser_name = input("Which browser would you like to use? (Options: firefox or chromium) ")
 links = open_all_links(website_url, browser_name)
